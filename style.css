@@ -12,6 +12,7 @@ header{
     margin: auto;
     background: aquamarine;   
     position: fixed;
+    z-index: 10;
 }
 header .Top{
     width: 80%;
@@ -51,4 +52,18 @@ header .Top #h2 a:hover{
     height: 500px;
     background-color: antiquewhite;
     margin: 5%;
+    overflow: hidden;
+    position: relative;
+}
+
+.feed .post img{
+    height: 100%;
+    position: absolute;
+    z-index: 3;
+}
+.feed .post .content{
+    position: absolute;
+    z-index: 4;
+    margin: 10%;
+    bottom: 0;
 }
