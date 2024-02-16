@@ -6,15 +6,18 @@ body{
     margin: 0;
     padding: 0;
     background: rgb(247, 206, 225);
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 header{
     width: 90%;
     margin-left: 5%;
     border-radius: 5vh;
+    top:0;
     height: 5vh;
-    background: pink;   
+    background: rgb(236, 130, 165);   
     position: fixed;
     z-index: 10;
+    margin-top: 20px;
 }
 header .Top{
     width: 80%;
@@ -27,7 +30,8 @@ header .Top #h1{
    margin: 4px;
 }
 header .Top #h2{
-    
+    display:flex;
+    align-items: center;
     margin: 4px;
     margin-left: auto;
 }
@@ -35,7 +39,16 @@ header .Top #h2 a{
     padding: 5px;
     border-style: solid;
     border-width: 0px;
+    text-decoration:none ;
+    color: black;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
+header .Top #h2 img{
+    height:20px;
+    width:20px;
+    mix-blend-mode:multiply;
+    mix-blend-mode:darken;
+} 
 header .Top #h2 a:hover{
     
     border-bottom-width: 1px;
@@ -43,10 +56,15 @@ header .Top #h2 a:hover{
 }
 
 .feed{
-    padding-top: 5vh;
+ margin-top: 20vh;
+ padding-top: 10px;
+ padding-bottom:10px;
     width: 50vw;
+    border-radius:10px;
+    margin-left:auto;
+    margin-right:auto;
+
     
-    margin: auto;
     background-color: palevioletred;
 }
 .feed .post{
