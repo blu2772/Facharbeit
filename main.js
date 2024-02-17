@@ -7,12 +7,40 @@ const posts = [
 
 ];
 
+const url = "http://127.0.0.1/Facharbeit/Api/Connect.php";
 
-function generatePosts() {
+async function sendPostRequest(data) {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+        throw new Error('Netzwerkantwort war nicht ok.');
+    }
+    
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    throw new Error("Fehler bei der POST-Anfrage: " + error);
+  }
+}
+
+
+async function generatePosts() {
     const feed = document.querySelector('.feed');
 
-    posts.forEach(post => {
+    const readdata = {
+        cmd: "read",
+        limit: 4,
+    };
+    const posts = await sendPostRequest(readdata);
+    console.log(posts);
 
+    posts.forEach(post => {
         const postDiv = document.createElement('div');
         postDiv.classList.add('post');
         postDiv.id = post.id;
@@ -23,3 +51,5 @@ function generatePosts() {
         feed.appendChild(postDiv);
     });
 }
+
+
