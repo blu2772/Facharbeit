@@ -35,7 +35,6 @@ async function generatePosts() {
 
     const readdata = {
         cmd: "read",
-        limit: 4,
     };
     const posts = await sendPostRequest(readdata);
     console.log(posts);
@@ -50,6 +49,37 @@ async function generatePosts() {
 
         feed.appendChild(postDiv);
     });
+}
+
+async function generatefeed(){
+  const feed = document.querySelector('.feedcontainer');
+
+  const readdata = {
+      cmd: "read",
+      limit: 4,
+  };
+  const posts = await sendPostRequest(readdata);
+  console.log(posts);
+
+  posts.forEach(post => {
+      const postDiv = document.createElement('div');
+      postDiv.classList.add('post');
+      postDiv.id = post.id;
+      
+      const content = `<img class="img" src="src/${post.img}"><div class="content"><h2>${post.title}</h2></div><img class="delet" onClick="deletPost(${post.id})" src="src/recycle-bin.svg">`;
+      postDiv.innerHTML = content;
+
+      feed.appendChild(postDiv);
+  });
+
+}
+async function deletPost(pID){
+  const readdata = {
+    cmd: "delet",
+    id: pID,
+};
+const posts = await sendPostRequest(readdata);
+generatefeed();
 }
 
 
