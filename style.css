@@ -14,7 +14,7 @@ header{
     border-radius: 5vh;
     top:0;
     height: 5vh;
-    background: rgb(236, 130, 165);   
+    background: rgb(219, 130, 160);   
     position: fixed;
     z-index: 10;
     margin-top: 20px;
@@ -35,17 +35,30 @@ header .Top #h2{
     margin: 4px;
     margin-left: auto;
 }
-header .Top #h2 a{
+header .Top #h2 #b1 {
     padding: 5px;
+    
     border-style: solid;
     border-width: 0px;
     text-decoration:none ;
     color: black;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+}
+header .Top #h2 #b2 {
+    padding: 5px;
+    
+    border-style: solid;
+    border-width: 0px;
+    text-decoration:none ;
+    color: black;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
 }
 header .Top #h2 img{
     height:20px;
     width:20px;
+    margin-left: 70px;
     mix-blend-mode:multiply;
     mix-blend-mode:darken;
 } 
