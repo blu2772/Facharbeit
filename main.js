@@ -20,6 +20,7 @@ async function sendPostRequest(data) {
     return result;
   } catch (error) {
     throw new Error("Fehler bei der POST-Anfrage: " + error);
+
   }
 }
 
@@ -203,7 +204,7 @@ async function deletPost(pID){
     cmd: "delet",
     id: pID,
 };
-const posts = await sendPostRequest(readdata);
+sendPostRequest(readdata);
 generatefeed();
 }
 
