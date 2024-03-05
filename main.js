@@ -1,41 +1,61 @@
-// Beispiel Daten
+const url = "http://127.0.0.1/Facharbeit/Api/";
 
-
-const url = "http://127.0.0.1/Facharbeit/Api/Connect.php";
-
-async function sendPostRequest(data) {
+async function sendPostRequest(pData) {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(url+"Connect.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(pData),
     });
     if (!response.ok) {
         throw new Error('Netzwerkantwort war nicht ok.');
     }
     try{
-        const result = await response.json();
-        return result;
+        const ergebnis = await response.json();
+        return ergebnis;
     }catch	(error){
         return response;
     }
     
   } catch (error) {
-    throw new Error("Fehler bei der POST-Anfrage: " + error);
+    throw new Error("Fehler bei der Anfrage: " + error);
 
   }
 }
+
+async function uploadImage(pBild) {
+    if (pBild.files && pBild.files[0]) {
+        var formData = new FormData();
+        formData.append('image', pBild.files[0]);
+  
+        try {
+            const response = await fetch(url+'image.php', {
+                method: 'POST',
+                body: formData,
+            });
+            const ergebnis = await response.json();
+            if (ergebnis.success) {
+                return ergebnis.path; 
+            } else {
+                console.error('error', ergebnis.message);
+            }
+        } catch (error) {
+            console.error('Fehler:', error);
+        }
+    }
+    return ""; 
+  }
 
 
 async function generatePosts() {
     const feed = document.querySelector('.feed');
 
-    const readdata = {
+    const Nachricht = {
         cmd: "read",
     };
-    const posts = await sendPostRequest(readdata);
+    const posts = await sendPostRequest(Nachricht);
     console.log(posts);
 
     posts.forEach(post => {
@@ -53,11 +73,11 @@ async function generatePosts() {
 async function generatefeed(){
   const feed = document.querySelector('.feedcontainer');
   feed.innerHTML = "";
-  const readdata = {
+  const Nachricht = {
       cmd: "read",
       limit: 4,
   };
-  const posts = await sendPostRequest(readdata);
+  const posts = await sendPostRequest(Nachricht);
   console.log(posts);
 
   posts.forEach(post => {
@@ -77,13 +97,13 @@ async function generatefeed(){
   });
 
 }
-async function openedit(id){
+async function openedit(pId){
     const feed = document.querySelector('.apps');
-    const readdata = {
+    const Nachricht = {
         cmd: "searchid",
-        id: id,
+        id: pId,
     };
-    const posts = await sendPostRequest(readdata);
+    const posts = await sendPostRequest(Nachricht);
     console.log(posts);
     const post = posts[0];
     const postDiv = document.createElement('div');
@@ -109,7 +129,7 @@ async function openedit(id){
                                     </div>
                                 </div>
                                 <div class="submit">
-                                    <button onclick="submitedit(${post.id})">Submit</button>
+                                    <button onclick="submitedit(${post.id}, '${post.img}')">Submit</button>
                                 </div>
                             </div>
                         </div>`;
@@ -123,12 +143,12 @@ async function newPost(){
     const feed = document.querySelector('.apps');
     const content = ` <div class="editor" >
                           <div class="window">
-                              <h1>Edit</h1>
+                              <h1>Neuer Post</h1>
                               <div class="in title">
-                                  <input type="text" id="title" name="title" placeholder="Title">
+                                  <input type="text" id="title" name="title" placeholder="Titel">
                               </div>
                               <div class="in content">
-                                  <textarea id="content" name="content" placeholder="Contnet"></textarea>
+                                  <textarea id="content" name="content" placeholder="Inhalt"></textarea>
                               </div>
                               <div class="in img">
                                   <input type="file" id="img" name="img" ">
@@ -142,28 +162,7 @@ async function newPost(){
 
     feed.appendChild(postDiv);
 }
-async function uploadImage(input) {
-  if (input.files && input.files[0]) {
-      var formData = new FormData();
-      formData.append('image', input.files[0]);
 
-      try {
-          const response = await fetch('http://127.0.0.1/Facharbeit/Api/image.php', {
-              method: 'POST',
-              body: formData,
-          });
-          const data = await response.json();
-          if (data.success) {
-              return data.path; 
-          } else {
-              console.error('error', data.message);
-          }
-      } catch (error) {
-          console.error('Fehler:', error);
-      }
-  }
-  return ""; 
-}
 
 async function submitcreate(){  
     const title = document.getElementById('title').value;
@@ -171,13 +170,13 @@ async function submitcreate(){
     const img = document.getElementById('img');
     const imagepath = await uploadImage(img);
     console.log(imagepath);
-    const readdata = {
+    const Nachricht = {
         cmd: "create",
         title: title,
         content: content,
         img: imagepath,
     };
-    const posts = await sendPostRequest(readdata);
+    const posts = await sendPostRequest(Nachricht);
     closeEditor();
     generatefeed();
 }
@@ -186,28 +185,34 @@ function closeEditor(){
     const feed = document.querySelector('.apps');
     feed.innerHTML = "";
 }
-async function submitedit(ID){
+async function submitedit(pID, pImage){
     const title = document.getElementById('title').value;
     const content = document.getElementById('content').value;
     const img = document.getElementById('img');
-    const imagepath = await uploadImage(img);
-    const readdata = {
+    let imagepath = pImage;
+    if(img.value !== ""){
+        imagepath = await uploadImage(img);
+    }
+
+    const Nachricht = {
         cmd: "edit",
-        id: ID,
+        id: pID,
         title: title,
         content: content,
         img: imagepath,
     };
-    const posts = await sendPostRequest(readdata);
+
+    const posts = await sendPostRequest(Nachricht);
+
     closeEditor();
     generatefeed();
 }
 async function deletPost(pID){
-  const readdata = {
+  const Nachricht = {
     cmd: "delet",
     id: pID,
 };
-const response = await sendPostRequest(readdata);
+const response = await sendPostRequest(Nachricht);
 generatefeed();
 }
 
