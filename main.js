@@ -15,9 +15,13 @@ async function sendPostRequest(data) {
     if (!response.ok) {
         throw new Error('Netzwerkantwort war nicht ok.');
     }
+    try{
+        const result = await response.json();
+        return result;
+    }catch	(error){
+        return response;
+    }
     
-    const result = await response.json();
-    return result;
   } catch (error) {
     throw new Error("Fehler bei der POST-Anfrage: " + error);
 
@@ -39,7 +43,7 @@ async function generatePosts() {
         postDiv.classList.add('post');
         postDiv.id = post.id;
         
-        const content = `<img src="src/${post.img}"><div class="content"><h2>${post.title}</h2><p>${post.content}</p></div>`;
+        const content = `<img src="Api/${post.img}"><div class="content"><h2>${post.title}</h2><p>${post.content}</p></div>`;
         postDiv.innerHTML = content;
 
         feed.appendChild(postDiv);
@@ -61,7 +65,7 @@ async function generatefeed(){
       postDiv.classList.add('post');
       postDiv.id = post.id;
       
-      const content = `<img class="img" src="src/${post.img}">
+      const content = `<img class="img" src="Api/${post.img}">
                         <div class="content">
                          <h2>${post.title}</h2>
                         </div>
@@ -94,11 +98,18 @@ async function openedit(id){
                                 <div class="in content">
                                     <textarea id="content" name="content" >${post.content}</textarea>
                                 </div>
-                                <div class="in img">
-                                    <input type="text" id="img" name="img" value="${post.img}">
+                                <div class="in immg">
+                                    <div class="sep">
+                                        <h1 class="pv" >Current Image</h1>
+                                        <img class="pv" src="Api/${post.img}">
+                                    </div>
+                                    <div class="sep">
+                                        <h1  >New Image</h1>
+                                        <input type="file" id="img" name="img" value="${post.img}">
+                                    </div>
                                 </div>
                                 <div class="submit">
-                                    <button onclick="submitedit()">Submit</button>
+                                    <button onclick="submitedit(${post.id})">Submit</button>
                                 </div>
                             </div>
                         </div>`;
@@ -106,22 +117,6 @@ async function openedit(id){
 
       feed.appendChild(postDiv);
 }
-async function uploadImage(file) {
-    const formData = new FormData();
-    formData.append('file', file);
-  
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData
-    });
-  
-    if (!response.ok) {
-      throw new Error('Netzwerkantwort war nicht ok.');
-    }
-  
-    const result = await response.json();
-    return result;
-  }
 async function newPost(){
     const postDiv = document.createElement('div');
       
@@ -136,7 +131,7 @@ async function newPost(){
                                   <textarea id="content" name="content" placeholder="Contnet"></textarea>
                               </div>
                               <div class="in img">
-                                  <input type="text" id="img" name="img" placeholder="img">
+                                  <input type="file" id="img" name="img" ">
                               </div>
                               <div class="submit">
                                   <button onclick="submitcreate()">Submit</button>
@@ -147,32 +142,40 @@ async function newPost(){
 
     feed.appendChild(postDiv);
 }
-async function uploadImage(file) {
-    const formData = new FormData();
-    formData.append('file', file);
-  
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData
-    });
-  
-    if (!response.ok) {
-      throw new Error('Netzwerkantwort war nicht ok.');
-    }
-  
-    const result = await response.json();
-    return result;
+async function uploadImage(input) {
+  if (input.files && input.files[0]) {
+      var formData = new FormData();
+      formData.append('image', input.files[0]);
+
+      try {
+          const response = await fetch('http://127.0.0.1/Facharbeit/Api/image.php', {
+              method: 'POST',
+              body: formData,
+          });
+          const data = await response.json();
+          if (data.success) {
+              return data.path; 
+          } else {
+              console.error('error', data.message);
+          }
+      } catch (error) {
+          console.error('Fehler:', error);
+      }
   }
-async function submitcreate(){
+  return ""; 
+}
+
+async function submitcreate(){  
     const title = document.getElementById('title').value;
     const content = document.getElementById('content').value;
-    const img = document.getElementById('img').value;
-
+    const img = document.getElementById('img');
+    const imagepath = await uploadImage(img);
+    console.log(imagepath);
     const readdata = {
         cmd: "create",
         title: title,
         content: content,
-        img: img,
+        img: imagepath,
     };
     const posts = await sendPostRequest(readdata);
     closeEditor();
@@ -183,17 +186,17 @@ function closeEditor(){
     const feed = document.querySelector('.apps');
     feed.innerHTML = "";
 }
-async function submitedit(){
+async function submitedit(ID){
     const title = document.getElementById('title').value;
     const content = document.getElementById('content').value;
-    const img = document.getElementById('img').value;
-    const id = document.querySelector('.post').id;
+    const img = document.getElementById('img');
+    const imagepath = await uploadImage(img);
     const readdata = {
         cmd: "edit",
-        id: id,
+        id: ID,
         title: title,
         content: content,
-        img: img,
+        img: imagepath,
     };
     const posts = await sendPostRequest(readdata);
     closeEditor();
@@ -204,7 +207,7 @@ async function deletPost(pID){
     cmd: "delet",
     id: pID,
 };
-sendPostRequest(readdata);
+const response = await sendPostRequest(readdata);
 generatefeed();
 }
 

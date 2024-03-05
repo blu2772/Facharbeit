@@ -3,6 +3,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 header('Access-Control-Allow-Methods: POST');
 
+
 $eingehendeDaten = file_get_contents('php://input');
 $daten = json_decode($eingehendeDaten, true);
 
@@ -14,6 +15,10 @@ $password = '';
 
 
 $db = new mysqli($host, $username, $password, $dbname);
+
+
+   
+
 
 
 if ($db->connect_error) {
@@ -83,18 +88,11 @@ switch ($daten['cmd']) {
             echo json_encode(['erfolg' => false, 'nachricht' => 'Fehler beim Erstellen der Daten']);
         }
         break;
-        case 'uploadImage':
-            $target_dir = "uploads/";
-            $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-            if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-                echo json_encode(['erfolg' => true, 'nachricht' => 'Bild erfolgreich hochgeladen', 'filePath' => $target_file]);
-            } else {
-                echo json_encode(['erfolg' => false, 'nachricht' => 'Fehler beim Hochladen des Bildes']);
-            }
-            break;
+       
     default:
-      
+    
         echo json_encode(['erfolg' => false, 'nachricht' => 'Unbekannter Befehl']);
+    
         break;
 }
 ?>
