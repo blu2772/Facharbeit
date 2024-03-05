@@ -242,7 +242,7 @@ header .Top #h2 a:hover{
     top:0;
     left: 0;
     width: 60vw;
-    background-color: aqua;
+    background-color: rgb(218, 146, 196);
     border-radius: 20px;
     z-index: 5;
     overflow: hidden;
