@@ -56,14 +56,14 @@ async function generatePosts() {
         cmd: "read",
     };
     const posts = await sendPostRequest(Nachricht);
-    console.log(posts);
+ 
 
     posts.forEach(post => {
         const postDiv = document.createElement('div');
         postDiv.classList.add('post');
         postDiv.id = post.id;
         
-        const content = `<img src="Api/${post.img}"><div class="content"><h2>${post.title}</h2><p>${post.content}</p></div>`;
+        const content = `<img onClick="openPostView(${post.id})" src="Api/${post.img}"><div class="content"><h2>${post.title}</h2><p>${post.content}</p></div>`;
         postDiv.innerHTML = content;
 
         feed.appendChild(postDiv);
@@ -78,14 +78,14 @@ async function generatefeed(){
       limit: 4,
   };
   const posts = await sendPostRequest(Nachricht);
-  console.log(posts);
+
 
   posts.forEach(post => {
       const postDiv = document.createElement('div');
       postDiv.classList.add('post');
       postDiv.id = post.id;
       
-      const content = `<img class="img" src="Api/${post.img}">
+      const content = `<img  class="img" src="Api/${post.img}">
                         <div class="content">
                          <h2>${post.title}</h2>
                         </div>
@@ -97,6 +97,31 @@ async function generatefeed(){
   });
 
 }
+async function openPostView(pId){
+    const feed = document.querySelector('.apps');
+    const Nachricht = {
+        cmd: "searchid",
+        id: pId,
+    };
+    const posts = await sendPostRequest(Nachricht);
+
+    const post = posts[0];
+    const postDiv = document.createElement('div');
+      
+    const content = `<div class="Open">
+                        <img src="Api/${post.img}" >
+                        <img class="close" onClick="closePostView()" src="Src/close.svg">
+                        <h1>${post.title}</h1>
+                        <div class="content">${post.content}</div>
+                    </div>`;
+    postDiv.innerHTML = content;
+
+    feed.appendChild(postDiv);
+}
+function closePostView(){
+    const feed = document.querySelector('.apps');
+    feed.innerHTML = "";
+}
 async function openedit(pId){
     const feed = document.querySelector('.apps');
     const Nachricht = {
@@ -104,7 +129,7 @@ async function openedit(pId){
         id: pId,
     };
     const posts = await sendPostRequest(Nachricht);
-    console.log(posts);
+
     const post = posts[0];
     const postDiv = document.createElement('div');
       
@@ -169,7 +194,7 @@ async function submitcreate(){
     const content = document.getElementById('content').value;
     const img = document.getElementById('img');
     const imagepath = await uploadImage(img);
-    console.log(imagepath);
+
     const Nachricht = {
         cmd: "create",
         title: title,
