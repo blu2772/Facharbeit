@@ -109,11 +109,13 @@ header .Top #h2 a:hover{
 }
 
 .console{
+    position: relative;
     width: 70%;
     margin-left: 15%;
     margin-top: 10vh;
     border-radius: 3vh;
-    background:rgb(236, 130, 165);  
+    background:rgb(236, 130, 165); 
+    z-index: 1; 
 }
 .console .np{
         width: 10%;
@@ -132,11 +134,11 @@ header .Top #h2 a:hover{
    display:flex;
    justify-content: center;
    align-items: center;
-    z-index: 2;
+    z-index: 10;
 
 }
 .editor .window{
- 
+
     padding: 2%;
     width: 50%;
     background-color: rgb(236, 117, 157); 
@@ -232,6 +234,7 @@ header .Top #h2 a:hover{
     display: flex;
     justify-content: center;
     align-items: center;
+
 
 }
 .Open{
