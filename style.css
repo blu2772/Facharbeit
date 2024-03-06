@@ -12,67 +12,42 @@ header{
     width: 90%;
     margin-left: 5%;
     border-radius: 5vh;
-    top:0;
+    top:20px;
     height: 5vh;
     background: rgb(219, 130, 160);   
     position: fixed;
     z-index: 10;
-    margin-top: 20px;
 }
-header .Top{
-    width: 98%;
-    margin: auto;
+header .Top{ 
     height: 100%;
     display: flex;
     align-items: center;
+    position: absolute;
+    right:5%;
 }
-header .Top #h1{
-   margin: 4px;
-}
-header .Top #h2{
-    display:flex;
-    align-items: center;
-    margin: 4px;
-    margin-left: auto;
-}
-header .Top #h2 a{
-    padding: 5px;
-    border-style: solid;
-    border-width: 0px;
-    text-decoration:none ;
-    color: black;
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-}
-header .Top #h2 #b1 {
-    padding: 5px;
-    border-style: solid;
-    border-width: 0px;
-    text-decoration:none ;
-    color: black;
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 
-}
-header .Top #h2 #b2 {
+header .Top a{
     padding: 5px;
     border-style: solid;
-    border-width: 0px;
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-color: transparent;
     text-decoration:none ;
     color: black;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-
 }
-header .Top #h2 img{
-    height:20px;
-    width:20px;
+header .Top a:hover{   
+    border-color: black;
+}
+
+header .Top img{
+    height:30px;
+    width:30px;
     margin-left: 70px;
     mix-blend-mode:multiply;
     mix-blend-mode:darken;
 } 
-header .Top #h2 a:hover{
-    
-    border-bottom-width: 1px;
 
-}
 
 .feed{
  margin-top: 20vh;
