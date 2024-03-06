@@ -27,27 +27,30 @@ class APIConnector {
         }
     }
 
-    async uploadImage(pBild) {
-        if (pBild.files && pBild.files[0]) {
-            var formData = new FormData();
-            formData.append('image', pBild.files[0]);
 
-            try {
-                const response = await fetch(this.url + 'image.php', {
-                    method: 'POST',
-                    body: formData,
-                });
-                const ergebnis = await response.json();
-                if (ergebnis.success) {
-                    return ergebnis.path;
-                } else {
-                    console.error('error', ergebnis.message);
-                }
-            } catch (error) {
-                console.error('Fehler:', error);
+    async uploadImage(pBild) {
+        try {
+            if (!pBild.files && !pBild.files[0]) {
+                throw new Error('Keine Datei ausgewählt.');
             }
+            let formData = new FormData();
+            formData.append('image', pBild.files[0]);
+            const response = await fetch(this.url + 'image.php', {
+                method: 'POST',
+                body: formData,
+            });
+            if (!response.ok) {
+                throw new Error('Netzwerkantwort war nicht ok.');
+            }
+            try {
+                const ergebnis = await response.json();
+                return ergebnis.path;
+            } catch (error) {
+                return response;
+            }
+        } catch (error) {
+            throw new Error("Fehler bei der Anfrage: " + error);
         }
-        return "";
     }
 }
 
@@ -55,7 +58,6 @@ class PostManager {
     constructor(apiConnector) {
         this.apiConnector = apiConnector;
     }
-
     async generatePosts() {
         const feed = document.querySelector('.feed');
 
