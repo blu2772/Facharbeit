@@ -4,7 +4,7 @@
     <script src="main.js"></script>
     <title>Facharbeit</title>
 </head>
-<body onload="generatefeed()">
+<body onload="postManager.generatefeed()">
     <header>
         <div class="Top">     
             <a href="/Facharbeit/index.html">Startseite</a>
@@ -13,7 +13,7 @@
         </div>
     </header>
     <div class="console">
-        <button class="np" onclick="newPost()">New Post</button>
+        <button class="np" onclick="postManager.newPost()">New Post</button>
         <div class="feedcontainer">
         </div>
     </div>

@@ -17,6 +17,7 @@ header{
     background: rgb(219, 130, 160);   
     position: fixed;
     z-index: 10;
+
 }
 header .Top{ 
     height: 100%;
