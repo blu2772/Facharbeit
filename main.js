@@ -131,11 +131,11 @@ class PostManager {
         const feed = document.querySelector('.apps');
         feed.innerHTML = "";
     }
-    async openedit(pId){
+    async openedit(pID){
         const feed = document.querySelector('.apps');
         const Nachricht = {
             cmd: "searchid",
-            id: pId,
+            id: pID,
         };
         const posts = await this.apiConnector.sendPostRequest(Nachricht);
         const post = posts[0];

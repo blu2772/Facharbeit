@@ -3,27 +3,17 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 header('Access-Control-Allow-Methods: POST');
 
-
 $eingehendeDaten = file_get_contents('php://input');
 $daten = json_decode($eingehendeDaten, true);
-
-
 $host = '127.0.0.1:3306';
 $dbname = 'Posts';
 $username = 'root';
 $password = '';
-
-
 $db = new mysqli($host, $username, $password, $dbname);
-
-
-   
-
-
-
 if ($db->connect_error) {
     die("Verbindung fehlgeschlagen: " . $db->connect_error);
 }
+
 
 
 switch ($daten['cmd']) {
