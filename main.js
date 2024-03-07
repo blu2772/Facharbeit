@@ -116,13 +116,14 @@ class PostManager {
 
         const post = posts[0];
         const postDiv = document.createElement('div');
+        postDiv.classList.add('Open');
         
-        const content = `<div class="Open">
+        const content = `
                             <img src="Api/${post.img}" >
                             <img class="close" onClick="postManager.closePostView()" src="Src/close.svg">
                             <h1>${post.title}</h1>
                             <div class="content">${post.content}</div>
-                        </div>`;
+                        `;
         postDiv.innerHTML = content;
 
         feed.appendChild(postDiv);
